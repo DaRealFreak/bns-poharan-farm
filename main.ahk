@@ -680,12 +680,14 @@ class Poharan
     {
         ; now run in with main account
         Game.SwitchToWindow(Game.GetStartingWindowHwid())
+        sleep 250
         Poharan.ExitDungeonSingleClient()
 
         ; every client leaves as well
         for index, hwnd in Game.GetOtherWindowHwids()
         {
             Game.SwitchToWindow(hwnd)
+            sleep 250
             Poharan.ExitDungeonSingleClient()
         }
 
