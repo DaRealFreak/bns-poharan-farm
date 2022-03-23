@@ -112,7 +112,7 @@ class Poharan
             }
 
             ; clear possible leftovers in chat
-            loop, 10 {
+            loop, 30 {
                 send {BackSpace}
                 sleep 2
             }
@@ -167,12 +167,14 @@ class Poharan
         }
 
         while (!UserInterface.IsInLoadingScreen()) {
-            ; sometimes stage selection is out of focus, so we try to set it twice
-            stage := Configuration.PoharanStage()
-			UserInterface.EditStage()
-			sleep 250
-			send %stage%
-			sleep 250
+            if (UserInterface.IsInF8Lobby()) {
+                ; sometimes stage selection is out of focus, so we try to set it twice
+                stage := Configuration.PoharanStage()
+                UserInterface.EditStage()
+                sleep 250
+                send %stage%
+                sleep 250
+            }
 
             UserInterface.ClickEnterDungeon()
             start := A_TickCount
@@ -329,7 +331,7 @@ class Poharan
 
         ; get into combat for accurate running distance
         loop, 5 {
-            send {tab}
+            Configuration.GetIntoCombat()
             sleep 100
         }
 
@@ -704,6 +706,11 @@ class Poharan
 
         if (UserInterface.IsOutOfCombat()) {
             while (!UserInterface.IsInF8Lobby()) {
+                if (!Utility.GameActive()) {
+                    log.addLogEntry("$time: couldn't find game process, exiting")
+                    ExitApp
+                }
+
                 ; walk a tiny bit to close possible confirmation windows
                 send {w}
                 sleep 250
@@ -714,18 +721,26 @@ class Poharan
                 UserInterface.ClickExit()
                 sleep 1000
                 send y
+                send f
                 sleep 1000
                 send y
+                send f
                 sleep 1000
                 send n
                 sleep 1000
                 send y
+                send f
                 sleep 1000
             }
 
             return
         } else {
             while (!UserInterface.IsInLoadingScreen()) {
+                if (!Utility.GameActive()) {
+                    log.addLogEntry("$time: couldn't find game process, exiting")
+                    ExitApp
+                }
+
                 UserInterface.ClickLeaveParty()
                 sleep 25
                 ; in case we're in the reward screen

@@ -34,6 +34,12 @@ class Configuration
         send 5
     }
 
+    GetIntoCombat()
+    {
+        ; tab spin as destroyer, use a short cooldown skill which doesn't move your character
+        send {tab}
+    }
+
     ; the amount of pixels you have to move before reaching a full 360° turn ingame
     CameraFullTurn()
     {
