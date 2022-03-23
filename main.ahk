@@ -279,9 +279,9 @@ class Poharan
         send {w up}
         sleep 250
 
-        ; spawn thrall
+        ; spawn thrall and wait a bit for thrall to get aggro
         send {Tab}
-        sleep 2*1000
+        sleep 3*1000
 
         loop, 5 {
             Configuration.DisableClipping()
