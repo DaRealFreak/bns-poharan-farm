@@ -29,6 +29,8 @@ class Camera
         }
 
         ToolTip % "the required amount for a full turn was: " total
+        Clipboard := total
+        Pause
     }
 
     ResetCamera(trackingActivated := false)
