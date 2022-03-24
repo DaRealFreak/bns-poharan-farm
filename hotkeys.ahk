@@ -37,7 +37,10 @@ F2::
     }
 
     return
-	
+
+F3::
+    Camera.GetFullTurn()
+
 *NumpadDot::
     Utility.ReleaseAllKeys()
     Reload

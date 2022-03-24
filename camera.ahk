@@ -17,6 +17,20 @@ class Camera
         DllCall("mouse_event", "UInt", 0x0001, "UInt", pxls, "UInt", 0)
     }
 
+    GetFullTurn()
+    {
+        Camera.ResetCamera(true)
+        total := 150
+        Camera.SpinPxls(-150)
+        sleep 150
+        while (!UserInterface.MapFixpoint()) {
+            Camera.SpinPxls(-1)
+            total += 1
+        }
+
+        ToolTip % "the required amount for a full turn was: " total
+    }
+
     ResetCamera(trackingActivated := false)
     {
         ; make sure map is not transparent
