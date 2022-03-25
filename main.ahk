@@ -198,7 +198,9 @@ class Poharan
         Poharan.WaitLoadingScreen()
 
         log.addLogEntry("$time: moving warlock to dungeon")
-        Poharan.EnterDungeon()
+        if (!Poharan.EnterDungeon()) {
+            return Poharan.ExitDungeon()
+        }
 
         log.addLogEntry("$time: moving clients to dungeon")
         ; every leecher moves to the dungeon as well after waiting for possible loading screens
@@ -207,7 +209,11 @@ class Poharan
             Game.SwitchToWindow(hwnd)
             Poharan.WaitLoadingScreen()
 
-            Poharan.EnterDungeon()
+            log.addLogEntry("$time: moving client " index " to dungeon")
+
+            if (!Poharan.EnterDungeon()) {
+                return Poharan.ExitDungeon()
+            }
         }
 
         return Poharan.MoveToBoss1()
@@ -223,6 +229,11 @@ class Poharan
 
         start := A_TickCount
         while (!UserInterface.IsInLoadingScreen()) {
+            if (A_TickCount > start + 20 * 1000) {
+                log.addLogEntry("$time: unable to enter dungeon, resetting run")
+                return false
+            }
+
             if (mod(Round(A_TickCount / 1000), 3) == 0) {
                 Random, rand, 1, 10
                 if (rand >= 5) {
@@ -236,6 +247,8 @@ class Poharan
 
             sleep 25
         }
+
+        return true
     }
 
     MoveToBoss1()
@@ -283,7 +296,7 @@ class Poharan
         send {Tab}
         sleep 3*1000
 
-        loop, 5 {
+        loop, 15 {
             Configuration.DisableClipping()
             sleep 25
         }
@@ -705,6 +718,11 @@ class Poharan
     ExitDungeonSingleClient()
     {
         log.addLogEntry("$time: exiting dungeon")
+
+        loop, 5 {
+            Configuration.DisableClipping()
+            sleep 25
+        }
 
         if (UserInterface.IsOutOfCombat()) {
             while (!UserInterface.IsInF8Lobby()) {
