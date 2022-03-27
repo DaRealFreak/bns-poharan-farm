@@ -49,4 +49,20 @@ class Utility
     ThousandsSep(value, s=",") {
         return RegExReplace(value, "\G\d+?(?=(\d{3})+(?:\D|$))", "$0" s)
     }
+
+    InsertionSort(ar)
+    {
+        for i, v in ar {
+            list .=	v ","
+        }
+
+        list :=	Trim(list,",")
+        Sort, list, N D`,
+
+        out := []
+        loop, parse, list, `,
+            out.Push(A_LoopField)
+
+        return out
+    }
 }

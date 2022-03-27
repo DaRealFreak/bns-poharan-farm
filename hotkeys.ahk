@@ -40,6 +40,7 @@ F2::
 
 F3::
     Camera.GetFullTurn()
+    return
 
 *NumpadDot::
     Utility.ReleaseAllKeys()

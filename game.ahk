@@ -2,6 +2,8 @@
 SendMode Input
 SetWorkingDir, %A_ScriptDir%
 
+#Include %A_ScriptDir%\lib\windows.ahk
+
 class Game
 {
     static startingWindowHwid := 0x0
@@ -39,6 +41,35 @@ class Game
         }
 
         return gameHwids
+    }
+
+    ; get hwids of twink account windows (excluded main window hwid) to switch f.e. windows for escaping sorted by process creation time
+    GetOtherWindowHwidsSorted()
+    {
+        processIds := []
+        sortedHwnd := []
+        list := ""
+
+        for _, hwnd in Game.GetOtherWindowHwids()
+        {
+            creationTime := GetHwndCreationTime(hwnd)
+            list .= creationTime ","
+            processIds[creationTime] := hwnd
+        }
+
+        list :=	Trim(list,",")
+        Sort, list, N D`,
+
+        out := []
+        loop, parse, list, `,
+            out.Push(A_LoopField)
+
+        for _, creationTime in out
+        {
+            sortedHwnd.Push(processIds[creationTime])
+        }
+
+        return sortedHwnd
     }
 
     ; get all relevant window hwids to send inputs to
@@ -87,9 +118,9 @@ class Game
     {
         Game.SetStartingWindowHwid()
 
-        for index, hwnd in Game.GetOtherWindowHwids()
+        for index, hwnd in Game.GetOtherWindowHwidsSorted()
         {
-            WinActivate, ahk_id %hwnd%
+            Game.SwitchToWindow(hwnd)
             MsgBox % "index: " . index . " hwnd: " . hwnd
         }
 
