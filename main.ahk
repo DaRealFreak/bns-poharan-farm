@@ -275,12 +275,12 @@ class Poharan
     MakePortalBoss(boss)
     {
         if (boss == 1) {
-            loop, 5 {
+            loop, 15 {
                 Configuration.EnableClipBossOne()
                 sleep 25
             }
         } else {
-            loop, 5 {
+            loop, 15 {
                 Configuration.EnableClipBossTwo()
                 sleep 25
             }
@@ -364,9 +364,6 @@ class Poharan
         sleep 0.2*1000 / Configuration.MovementSpeedhackValue()
         send {a up}
         send {s up}
-
-        ; lose aggro of mobs or let them run into range so we don't suicide by running into the fire
-        sleep 4*1000
     }
 
     FightBoss1()
