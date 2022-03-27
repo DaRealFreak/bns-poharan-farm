@@ -124,7 +124,7 @@ class Poharan
 			sleep 50
 
             ; every leecher accepts
-            for index, hwnd in Game.GetOtherWindowHwids()
+            for index, hwnd in Game.GetOtherWindowHwidsSorted()
             {
                 Game.SwitchToWindow(hwnd)
                 
@@ -204,7 +204,7 @@ class Poharan
 
         log.addLogEntry("$time: moving clients to dungeon")
         ; every leecher moves to the dungeon as well after waiting for possible loading screens
-        for index, hwnd in Game.GetOtherWindowHwids()
+        for index, hwnd in Game.GetOtherWindowHwidsSorted()
         {
             Game.SwitchToWindow(hwnd)
             Poharan.WaitLoadingScreen()
@@ -261,7 +261,7 @@ class Poharan
 
         log.addLogEntry("$time: moving clients to Tae Jangum")
         ; every leecher moves to the dungeon as well after waiting for possible loading screens
-        for index, hwnd in Game.GetOtherWindowHwids()
+        for index, hwnd in Game.GetOtherWindowHwidsSorted()
         {
             Game.SwitchToWindow(hwnd)
             Poharan.WaitLoadingScreen()
@@ -371,7 +371,7 @@ class Poharan
         log.addLogEntry("$time: fighting boss Tae Jangum")
 
         ; every leecher moves to the dungeon as well after waiting for possible loading screens
-        for index, hwnd in Game.GetOtherWindowHwids()
+        for index, hwnd in Game.GetOtherWindowHwidsSorted()
         {
             Game.SwitchToWindow(hwnd)
             Configuration.ToggleAutoCombat()
@@ -391,7 +391,7 @@ class Poharan
         sleep 6*1000 / Configuration.MovementSpeedhackValue()
 
         ; every leecher moves to the dungeon as well after waiting for possible loading screens
-        for index, hwnd in Game.GetOtherWindowHwids()
+        for index, hwnd in Game.GetOtherWindowHwidsSorted()
         {
             Game.SwitchToWindow(hwnd)
             Configuration.ToggleAutoCombat()
@@ -407,7 +407,7 @@ class Poharan
         log.addLogEntry("$time: moving clients on bridge")
 
         ; every leecher moves to Poharan
-        for index, hwnd in Game.GetOtherWindowHwids()
+        for index, hwnd in Game.GetOtherWindowHwidsSorted()
         {
             Game.SwitchToWindow(hwnd)
 
@@ -471,7 +471,7 @@ class Poharan
 
         log.addLogEntry("$time: moving clients further down the bridge")
         ; every leecher moves to Poharan
-        for index, hwnd in Game.GetOtherWindowHwids()
+        for index, hwnd in Game.GetOtherWindowHwidsSorted()
         {
             Game.SwitchToWindow(hwnd)
 
@@ -527,7 +527,7 @@ class Poharan
 
         log.addLogEntry("$time: moving clients into position for poharan")
         ; every leecher moves into the same position as well
-        for index, hwnd in Game.GetOtherWindowHwids()
+        for index, hwnd in Game.GetOtherWindowHwidsSorted()
         {
             Game.SwitchToWindow(hwnd)
 
@@ -547,7 +547,7 @@ class Poharan
     {
         log.addLogEntry("$time: starting autocombat for clients")
         ; every leecher moves into the same position as well
-        for index, hwnd in Game.GetOtherWindowHwids()
+        for index, hwnd in Game.GetOtherWindowHwidsSorted()
         {
             Game.SwitchToWindow(hwnd)
 
@@ -561,7 +561,7 @@ class Poharan
         /*
         log.addLogEntry("$time: switching to clients for better autocombat")
         ; every leecher moves into the same position as well
-        for index, hwnd in Game.GetOtherWindowHwids()
+        for index, hwnd in Game.GetOtherWindowHwidsSorted()
         {
             Game.SwitchToWindow(hwnd)
         }
@@ -598,7 +598,7 @@ class Poharan
 
         log.addLogEntry("$time: switching to clients for better autocombat")
         ; every leecher moves into the same position as well
-        for index, hwnd in Game.GetOtherWindowHwids()
+        for index, hwnd in Game.GetOtherWindowHwidsSorted()
         {
             Game.SwitchToWindow(hwnd)
             sleep 250
@@ -694,7 +694,7 @@ class Poharan
         Poharan.ExitDungeonSingleClient()
 
         ; every client leaves as well
-        for index, hwnd in Game.GetOtherWindowHwids()
+        for index, hwnd in Game.GetOtherWindowHwidsSorted()
         {
             Game.SwitchToWindow(hwnd)
             sleep 250
