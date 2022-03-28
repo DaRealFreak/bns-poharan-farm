@@ -13,9 +13,19 @@ class Configuration
         return 5
     }
 
-    InviteDuo()
+    UseWarlockForB1()
     {
-        send /invite "Lunar Tempest"
+        return true
+    }
+
+    Clients()
+    {
+        return ["Lunar Tempest"]
+    }
+
+    InviteDuo(name)
+    {
+        send /invite "%name%"
     }
 
     ToggleMapTransparency()
@@ -68,13 +78,13 @@ class Configuration
     ; enable speed hack (sanic or normal ce speedhack)
     EnableLobbySpeedhack()
     {
-        send {Numpad7}
+        send {Numpad7 down}
     }
 
     ; disable movement speed hack (sanic or normal ce speedhack)
     DisableLobbySpeedhack()
     {
-        send {Numpad3}
+        send {Numpad7 up}
     }
 
     EnableAnimationSpeedhack()
@@ -97,10 +107,36 @@ class Configuration
         send {Numpad3}
     }
 
+    EnableSlowAnimationSpeedhack()
+    {
+        send {F18}
+    }
+
+    EnableWarlockClientSuspend()
+    {
+        send {F20}
+    }
+
+    EnableClientSuspend()
+    {
+        send {F19}
+    }
+
+    DisableClientSuspend()
+    {
+        send {Numpad5}
+    }
+
     ; configured speed value
     MovementSpeedhackValue()
     {
         return 8
+    }
+
+    ; configured speed value
+    SlowMovementSpeedhackValue()
+    {
+        return 5.5
     }
 
     ; shortcut for shadowplay clip in case we want to debug how we got stuck or got to this point

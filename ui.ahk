@@ -86,7 +86,7 @@ class UserInterface
     ; some of the filled out bar in the loading screen on the bottom of the screen
     IsInLoadingScreen()
     {
-        return Utility.GetColor(17,1063) == "0xFF7C00"
+        return Utility.GetColor(17,1063) == "0xFF7C00" || Utility.GetColor(1861,1062) == "0x090303"
     }
 
     ; literally any UI element in lobby and ingame, just used for checking if we're out of the loading screen, I'm using here my unity bar and enter button
