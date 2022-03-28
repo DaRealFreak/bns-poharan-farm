@@ -20,7 +20,7 @@ class Configuration
 
     Clients()
     {
-        return ["Lunar Tempest", "NiceAndBalanced"]
+        return ["Lunar Tempest"]
     }
 
     InviteDuo(name)
@@ -33,39 +33,16 @@ class Configuration
         send n
     }
 
-    ; whatever we want to do if health is critical (f.e. hmb/drinking potions)
-    CriticalHpAction()
-    {
-        Configuration.UseHealthPotion()
-    }
-
-    UseHealthPotion()
-    {
-        send 5
-    }
-
     GetIntoCombat()
     {
         ; tab spin as destroyer, use a short cooldown skill which doesn't move your character
-        send {tab}
+        send z
     }
 
     ; the amount of pixels you have to move before reaching a full 360° turn ingame
     CameraFullTurn()
     {
         return 3174
-    }
-
-    ; hotkey where the field repair hammers are placed
-    UseRepairTools()
-    {
-        send 7
-    }
-
-    ; after how many runs should we repair our weapon
-    UseRepairToolsAfterRunCount()
-    {
-        return 30
     }
 
     ToggleAutoCombat()
@@ -110,21 +87,6 @@ class Configuration
     EnableSlowAnimationSpeedhack()
     {
         send {F18}
-    }
-
-    EnableWarlockClientSuspend()
-    {
-        send {F20}
-    }
-
-    EnableClientSuspend()
-    {
-        send {F19}
-    }
-
-    DisableClientSuspend()
-    {
-        send {Numpad5}
     }
 
     ; configured speed value

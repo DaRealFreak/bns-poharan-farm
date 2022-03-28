@@ -92,30 +92,6 @@ class Poharan
         }
     }
 
-    EnableWarlockClientSuspend()
-    {
-        loop, 20 {
-            Configuration.EnableWarlockClientSuspend()
-            sleep 50
-        }
-    }
-
-    EnableClientSuspend()
-    {
-        loop, 20 {
-            Configuration.EnableClientSuspend()
-            sleep 50
-        }
-    }
-
-    DisableClientSuspend()
-    {
-        loop, 20 {
-            Configuration.DisableClientSuspend()
-            sleep 50
-        }
-    }
-
     ; simply check for the buff food and use 
     CheckBuffFood()
     {
@@ -131,14 +107,6 @@ class Poharan
             sleep 50
             send {w up}
             sleep 200
-        }
-    }
-
-    ; function we use for checking if we should check potions
-    CheckHealth()
-    {
-        if (UserInterface.IsHpBelowCritical()) {
-            Configuration.UseHealthPotion()
         }
     }
 
@@ -813,14 +781,6 @@ class Poharan
         return true
     }
 
-    CheckRepair()
-    {
-        ; repair weapon after the defined amount of runs
-        if (mod(this.runCount, Configuration.UseRepairToolsAfterRunCount()) == 0 || this.runCount == 0) {
-            Poharan.RepairWeapon()
-        }
-    }
-
     ExitOverLobby()
     {
         log.addLogEntry("$time: exiting over lobby")
@@ -969,18 +929,6 @@ class Poharan
         expectedSuccessfulRunsPerHour := averageRunsHour * successRate
 
         log.addLogEntry("$time: runs done: " this.runCount " (died in " (failedRuns) " out of " this.runCount " runs (" Utility.RoundDecimal(failedRate * 100) "%), average run time: " Utility.RoundDecimal(averageRunTime) " seconds)")
-    }
-
-    ; repair the weapon
-    RepairWeapon()
-    {
-        log.addLogEntry("$time: repairing weapon")
-
-        start := A_TickCount
-        while (A_TickCount < start + 5.5*1000) {
-            Configuration.UseRepairTools()
-            sleep 5
-        }
     }
 
     Exiting()
