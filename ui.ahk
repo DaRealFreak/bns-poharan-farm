@@ -103,7 +103,12 @@ class UserInterface
     ; any pixel on the revive skil
     IsReviveVisible()
     {
-        return Utility.GetColor(1034,899) == "0x645338"
+        return Utility.GetColor(1042,900) == "0x9B8D71"
+    }
+
+    IsThrallReady()
+    {
+        return Utility.GetColor(825,900) == "0x01040E"
     }
 
     ; sprint bar to check if we're out of combat

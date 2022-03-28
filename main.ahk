@@ -38,7 +38,7 @@ class Poharan
 
     EnableAnimationSpeedHack()
     {
-        loop, 15 {
+        loop, 20 {
             Configuration.EnableAnimationSpeedHack()
             sleep 50
         }
@@ -46,7 +46,7 @@ class Poharan
 
     EnableSlowAnimationSpeedHack()
     {
-        loop, 15 {
+        loop, 20 {
             Configuration.EnableSlowAnimationSpeedHack()
             sleep 50
         }
@@ -54,7 +54,7 @@ class Poharan
 
     EnableAnimationSpeedHackWarlock()
     {
-        loop, 15 {
+        loop, 20 {
             Configuration.EnableAnimationSpeedHackWarlock()
             sleep 50
         }
@@ -62,7 +62,7 @@ class Poharan
 
     DisableAnimationSpeedHack()
     {
-        loop, 15 {
+        loop, 20 {
             Configuration.DisableAnimationSpeedhack()
             sleep 50
         }
@@ -70,7 +70,7 @@ class Poharan
 
     DisableAnimationSpeedHackWarlock()
     {
-        loop, 15 {
+        loop, 20 {
             Configuration.DisableAnimationSpeedHackWarlock()
             sleep 50
         }
@@ -78,7 +78,7 @@ class Poharan
 
     EnableLobbySpeedhack()
     {
-        loop, 15 {
+        loop, 20 {
             Configuration.EnableLobbySpeedhack()
             sleep 50
         }
@@ -86,7 +86,7 @@ class Poharan
 
     DisableLobbySpeedhack()
     {
-        loop, 15 {
+        loop, 20 {
             Configuration.DisableLobbySpeedhack()
             sleep 50
         }
@@ -94,7 +94,7 @@ class Poharan
 
     EnableWarlockClientSuspend()
     {
-        loop, 15 {
+        loop, 20 {
             Configuration.EnableWarlockClientSuspend()
             sleep 50
         }
@@ -102,7 +102,7 @@ class Poharan
 
     EnableClientSuspend()
     {
-        loop, 15 {
+        loop, 20 {
             Configuration.EnableClientSuspend()
             sleep 50
         }
@@ -110,7 +110,7 @@ class Poharan
 
     DisableClientSuspend()
     {
-        loop, 15 {
+        loop, 20 {
             Configuration.DisableClientSuspend()
             sleep 50
         }
@@ -276,6 +276,8 @@ class Poharan
             {
                 Game.SwitchToWindow(hwnd)
                 Poharan.WaitLoadingScreen()
+                ; safety disable since ce hotkeys failed few times previously
+                Poharan.DisableLobbySpeedhack()
 
                 log.addLogEntry("$time: moving client " index " to dungeon")
 
@@ -359,8 +361,11 @@ class Poharan
     MakePortalBoss(boss)
     {
         ; thrall not ready
-        while (Utility.GetColor(825,900) != "0x01040E") {
-            sleep 25
+        if (!UserInterface.IsThrallReady()) {
+            log.addLogEntry("$time: thrall is not ready yet, waiting for thrall cooldown")
+            while (!UserInterface.IsThrallReady()) {
+                sleep 25
+            }
         }
 
         if (boss == 1) {
@@ -409,17 +414,13 @@ class Poharan
         ; fade in sometimes fucked it up, better sleep for a bit
         sleep 0.5*1000
 
-        Poharan.EnableSlowAnimationSpeedHack()
-
         send {a down}
-        sleep 0.4*1000 / Configuration.SlowMovementSpeedhackValue()
+        sleep 0.4*1000
         send {a up}
 
         send {w down}
-        sleep 3.2*1000 / Configuration.SlowMovementSpeedhackValue()
+        sleep 3.2*1000
         send {w up}
-
-        Poharan.DisableAnimationSpeedHack()
 
         if (Configuration.UseWarlockForB1()) {
             Poharan.EnableAnimationSpeedHackWarlock()
@@ -454,7 +455,7 @@ class Poharan
         }
 
         send {w down}
-        sleep 5*1000 / Configuration.MovementSpeedhackValue()
+        sleep 6.5*1000 / Configuration.MovementSpeedhackValue()
         send {w up}
 
         send {d down}
@@ -516,6 +517,8 @@ class Poharan
             }
         }
 
+        ; turn 10° to the left, it's nearly always required and faster
+        Camera.Spin(-10)
         sleep 250
         Camera.ResetCamera()
 
@@ -723,20 +726,6 @@ class Poharan
 
     LeaveDungeon()
     {
-        if (Configuration.UseWarlockForB1()) {
-            for index, hwnd in Game.GetOtherWindowHwidsSorted()
-            {
-                Game.SwitchToWindow(hwnd)
-                sleep 250
-                Poharan.DisableAnimationSpeedHack()
-                sleep 250
-                if (!Poharan.LeaveDungeonClient(index == 1 && !Configuration.UseWarlockForB1())) {
-                    log.addLogEntry("$time: unable to reset the dungeon for the client, resetting")
-                    return Poharan.ExitDungeon()
-                }
-            }
-        }
-
         Game.SwitchToWindow(Game.GetStartingWindowHwid())
 
         sleep 250
@@ -748,16 +737,14 @@ class Poharan
             return Poharan.ExitDungeon()
         }
 
-        if (!Configuration.UseWarlockForB1()) {
-            for index, hwnd in Game.GetOtherWindowHwidsSorted()
-            {
-                Game.SwitchToWindow(hwnd)
-                sleep 250
-                Poharan.DisableAnimationSpeedHack()
-                sleep 250
-                if (!Poharan.LeaveDungeonClient(index == 1 && !Configuration.UseWarlockForB1())) {
-                    return Poharan.ExitDungeon()
-                }
+        for index, hwnd in Game.GetOtherWindowHwidsSorted()
+        {
+            Game.SwitchToWindow(hwnd)
+            sleep 250
+            Poharan.DisableAnimationSpeedHack()
+            sleep 250
+            if (!Poharan.LeaveDungeonClient(index == 1 && !Configuration.UseWarlockForB1())) {
+                return Poharan.ExitDungeon()
             }
         }
 
@@ -779,7 +766,7 @@ class Poharan
             sleep 25
         }
 
-        Camera.Spin(-10)
+        Camera.Spin(-20)
 
         if (!Camera.ResetCamera(client)) {
             log.addLogEntry("$time: unable to reset camera, returning to lobby")
@@ -806,20 +793,21 @@ class Poharan
 
         while (UserInterface.IsExitPortalVisible()) {
             send f
-            sleep 250
+            sleep 150
             send y
-            sleep 250
+            sleep 150
         }
 
         while (!UserInterface.IsInLoadingScreen()) {
             loop, 5 {
                 send f
                 send y
-                sleep 350
+                sleep 150
             }
             send n
         }
 
+        Poharan.DisableAnimationSpeedHack()
         Poharan.DisableLobbySpeedhack()
 
         return true
@@ -858,8 +846,10 @@ class Poharan
         Poharan.ExitDungeonSingleClient()
 
         ; every client leaves as well
-        for index, hwnd in Game.GetOtherWindowHwidsSorted()
+        gameHwnds := Game.GetOtherWindowHwidsSorted()
+        Loop, % vIndex := gameHwnds.Length()
         {
+            hwnd := gameHwnds[vIndex--]
             Game.SwitchToWindow(hwnd)
             sleep 250
             Poharan.ExitDungeonSingleClient()
