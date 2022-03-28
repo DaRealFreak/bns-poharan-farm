@@ -20,7 +20,7 @@ class Configuration
 
     Clients()
     {
-        return ["Lunar Tempest"]
+        return ["Lunar Tempest", "NiceAndBalanced"]
     }
 
     InviteDuo(name)

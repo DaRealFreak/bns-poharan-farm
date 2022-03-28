@@ -310,6 +310,18 @@ class Poharan
                 log.addLogEntry("$time: unable to enter dungeon, resetting run")
                 return false
             }
+
+            if (mod(Round(A_TickCount / 1000), 3) == 0) {
+                Random, rand, 1, 10
+                if (rand >= 5) {
+                    send {Space down}
+                    sleep 200
+                    send {Space up}
+                }
+                ; sleep 0.5 seconds so we don't run into the modulo check again in this cycle
+                sleep 1000
+            }
+
             sleep 25
         }
 
@@ -393,8 +405,9 @@ class Poharan
     ClientMoveToBoss1()
     {
         Poharan.WaitLoadingScreen()
+
         ; fade in sometimes fucked it up, better sleep for a bit
-        sleep 1*1000
+        sleep 0.5*1000
 
         Poharan.EnableSlowAnimationSpeedHack()
 
@@ -789,6 +802,8 @@ class Poharan
             return Poharan.ExitDungeon()
         }
 
+        Poharan.EnableLobbySpeedhack()
+
         while (UserInterface.IsExitPortalVisible()) {
             send f
             sleep 250
@@ -804,6 +819,8 @@ class Poharan
             }
             send n
         }
+
+        Poharan.DisableLobbySpeedhack()
 
         return true
     }
