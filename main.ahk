@@ -607,6 +607,23 @@ class Poharan
         sleep 250
         Camera.ResetCamera(true)
 
+        send {w down}
+        sleep 15*1000 / Configuration.MovementSpeedhackValue()
+        send {w up}
+
+        Configuration.ToggleAutoCombat()
+
+        ; sleep 2 seconds to get into combat if there are mobs left
+        sleep 2*1000
+
+        while (!UserInterface.IsOutOfCombat()) {
+            sleep 25
+        }
+
+        Configuration.ToggleAutoCombat()
+        sleep 250
+        Camera.ResetCamera(true)
+
         return Poharan.MoveToPoharan()
     }
 
@@ -701,7 +718,7 @@ class Poharan
         sleep 250
 
         if (!Poharan.LeaveDungeonClient(Configuration.UseWarlockForB1())) {
-            log.addLogEntry("$time: unable to reset the dungeon for the warlock, resetting")
+            log.addLogEntry("$time: unable to reset the dungeon for the warlock, probably stuck on bridge")
             return Poharan.ExitDungeon()
         }
 
@@ -753,8 +770,8 @@ class Poharan
         sleep 500
 
         if (!UserInterface.IsExitPortalVisible()) {
-            log.addLogEntry("$time: most likely died in the boss fight, returning to lobby")
-            return Poharan.ExitDungeon()
+            log.addLogEntry("$time: most likely dropped something from Tae Jangum, exit to lobby")
+            return Poharan.ExitDungeon(false)
         }
 
         Poharan.EnableLobbySpeedhack()
