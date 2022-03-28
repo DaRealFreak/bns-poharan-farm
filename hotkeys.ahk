@@ -25,7 +25,7 @@ F2::
     log.initalizeNewLogFile(1)
     log.addLogEntry("$time: starting poharan farm")
 
-    Game.SetStartingWindowHwid()
+    Game.SetStartingWindowHwnd()
 
     Poharan.EnterLobby()
 

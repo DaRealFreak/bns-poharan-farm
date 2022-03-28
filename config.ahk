@@ -109,21 +109,6 @@ class Configuration
         send {alt up}{f10 up}
     }
 
-    UseTalisman()
-    {
-        send r
-    }
-
-    UseRevive()
-    {
-        send 4
-    }
-
-    UseBlockSkill()
-    {
-        send 1
-    }
-
     EnableClipBossOne()
     {
         ; x -> 11551

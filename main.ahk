@@ -115,7 +115,7 @@ class Poharan
         log.addLogEntry("$time: moving to dungeon")
 
         while (true) {
-            Game.SwitchToWindow(Game.GetStartingWindowHwid())
+            Game.SwitchToWindow(Game.GetStartingWindowHwnd())
 
             if (UserInterface.IsDuoReady()) {
                 break
@@ -145,7 +145,7 @@ class Poharan
             }
 
             ; every leecher accepts
-            for index, hwnd in Game.GetOtherWindowHwidsSorted()
+            for index, hwnd in Game.GetOtherWindowHwndsSorted()
             {
                 Game.SwitchToWindow(hwnd)
 
@@ -180,7 +180,7 @@ class Poharan
                 }
             }
 
-            Game.SwitchToWindow(Game.GetStartingWindowHwid())
+            Game.SwitchToWindow(Game.GetStartingWindowHwnd())
 
             ; break if duo is ready or sleep 3 seconds before next invite cycle
             lastInvite := 0
@@ -227,7 +227,7 @@ class Poharan
         if (!onlyClients) {
             this.runStartTimeStamp := A_TickCount
 
-            Game.SwitchToWindow(Game.GetStartingWindowHwid())
+            Game.SwitchToWindow(Game.GetStartingWindowHwnd())
             Poharan.WaitLoadingScreen()
 
             log.addLogEntry("$time: moving warlock to dungeon")
@@ -240,7 +240,7 @@ class Poharan
         if (onlyClients || !Configuration.UseWarlockForB1()) {
             log.addLogEntry("$time: moving clients to dungeon")
             ; every leecher moves to the dungeon as well after waiting for possible loading screens
-            for index, hwnd in Game.GetOtherWindowHwidsSorted()
+            for index, hwnd in Game.GetOtherWindowHwndsSorted()
             {
                 Game.SwitchToWindow(hwnd)
                 Poharan.WaitLoadingScreen()
@@ -300,7 +300,7 @@ class Poharan
 
     MoveToBoss1()
     {
-        Game.SwitchToWindow(Game.GetStartingWindowHwid())
+        Game.SwitchToWindow(Game.GetStartingWindowHwnd())
         Poharan.WaitLoadingScreen()
 
         if (!Configuration.UseWarlockForB1()) {
@@ -309,7 +309,7 @@ class Poharan
 
             log.addLogEntry("$time: moving clients to Tae Jangum")
             ; every leecher moves to the dungeon as well after waiting for possible loading screens
-            for index, hwnd in Game.GetOtherWindowHwidsSorted()
+            for index, hwnd in Game.GetOtherWindowHwndsSorted()
             {
                 ; only use the first window to go for b1
                 if (index == 1) {
@@ -452,7 +452,7 @@ class Poharan
                 return Poharan.ExitDungeon()
             }
 
-            Game.SwitchToWindow(Game.GetStartingWindowHwid())
+            Game.SwitchToWindow(Game.GetStartingWindowHwnd())
         }
 
         while (!UserInterface.IsDynamicVisible()) {
@@ -470,7 +470,7 @@ class Poharan
 
         if (!Configuration.UseWarlockForB1()) {
             ; switch back to carry
-            for index, hwnd in Game.GetOtherWindowHwidsSorted()
+            for index, hwnd in Game.GetOtherWindowHwndsSorted()
             {
                 if (index == 1) {
                     Game.SwitchToWindow(hwnd)
@@ -529,7 +529,7 @@ class Poharan
 
         if (Configuration.UseWarlockForB1()) {
             ; every leecher moves to Poharan
-            for index, hwnd in Game.GetOtherWindowHwidsSorted()
+            for index, hwnd in Game.GetOtherWindowHwndsSorted()
             {
                 Game.SwitchToWindow(hwnd)
                 send {w down}
@@ -552,7 +552,7 @@ class Poharan
             }
         } else {
             log.addLogEntry("$time: moving warlock to Poharan")
-            Game.SwitchToWindow(Game.GetStartingWindowHwid())
+            Game.SwitchToWindow(Game.GetStartingWindowHwnd())
             Poharan.MakePortalBoss(2)
 
             ; get out of combat
@@ -580,11 +580,11 @@ class Poharan
         }
 
         if (Configuration.UseWarlockForB1()) {
-            Game.SwitchToWindow(Game.GetStartingWindowHwid())
+            Game.SwitchToWindow(Game.GetStartingWindowHwnd())
         } else {
             log.addLogEntry("$time: moving clients to Tae Jangum")
             ; every leecher moves to the dungeon as well after waiting for possible loading screens
-            for index, hwnd in Game.GetOtherWindowHwidsSorted()
+            for index, hwnd in Game.GetOtherWindowHwndsSorted()
             {
                 ; only use the first window to go for b1
                 if (index == 1) {
@@ -613,7 +613,7 @@ class Poharan
     MoveToPoharan()
     {
         log.addLogEntry("$time: moving warlock into position for poharan")
-        Game.SwitchToWindow(Game.GetStartingWindowHwid())
+        Game.SwitchToWindow(Game.GetStartingWindowHwnd())
 
         if (Configuration.UseWarlockForB1()) {
             Poharan.EnableAnimationSpeedHack()
@@ -631,7 +631,7 @@ class Poharan
 
         log.addLogEntry("$time: moving clients into position for poharan")
         ; every leecher moves into the same position as well
-        for index, hwnd in Game.GetOtherWindowHwidsSorted()
+        for index, hwnd in Game.GetOtherWindowHwndsSorted()
         {
             Game.SwitchToWindow(hwnd)
 
@@ -651,7 +651,7 @@ class Poharan
     {
         log.addLogEntry("$time: starting autocombat for clients")
         ; every leecher moves into the same position as well
-        for index, hwnd in Game.GetOtherWindowHwidsSorted()
+        for index, hwnd in Game.GetOtherWindowHwndsSorted()
         {
             Game.SwitchToWindow(hwnd)
 
@@ -659,13 +659,13 @@ class Poharan
         }
 
         log.addLogEntry("$time: starting autocombat for warlock")
-        Game.SwitchToWindow(Game.GetStartingWindowHwid())
+        Game.SwitchToWindow(Game.GetStartingWindowHwnd())
         Configuration.ToggleAutoCombat()
 
         if (!Configuration.UseWarlockForB1()) {
             log.addLogEntry("$time: switching to clients for better autocombat")
             ; every leecher moves into the same position as well
-            for index, hwnd in Game.GetOtherWindowHwidsSorted()
+            for index, hwnd in Game.GetOtherWindowHwndsSorted()
             {
                 if (index == 1) {
                     Game.SwitchToWindow(hwnd)
@@ -694,7 +694,7 @@ class Poharan
 
     LeaveDungeon()
     {
-        Game.SwitchToWindow(Game.GetStartingWindowHwid())
+        Game.SwitchToWindow(Game.GetStartingWindowHwnd())
 
         sleep 250
         Poharan.DisableAnimationSpeedHackWarlock()
@@ -705,7 +705,7 @@ class Poharan
             return Poharan.ExitDungeon()
         }
 
-        for index, hwnd in Game.GetOtherWindowHwidsSorted()
+        for index, hwnd in Game.GetOtherWindowHwndsSorted()
         {
             Game.SwitchToWindow(hwnd)
             sleep 250
@@ -801,12 +801,12 @@ class Poharan
     ExitDungeon()
     {
         ; now run in with main account
-        Game.SwitchToWindow(Game.GetStartingWindowHwid())
+        Game.SwitchToWindow(Game.GetStartingWindowHwnd())
         sleep 250
         Poharan.ExitDungeonSingleClient()
 
         ; every client leaves as well
-        gameHwnds := Game.GetOtherWindowHwidsSorted()
+        gameHwnds := Game.GetOtherWindowHwndsSorted()
         Loop, % vIndex := gameHwnds.Length()
         {
             hwnd := gameHwnds[vIndex--]

@@ -6,51 +6,51 @@ SetWorkingDir, %A_ScriptDir%
 
 class Game
 {
-    static startingWindowHwid := 0x0
+    static startingWindowHwnd := 0x0
 
     __New() {
-        this.SetStartingWindowHwid()
+        this.SetStartingWindowHwnd()
     }
 
     ; set the current active window as starting window
-    SetStartingWindowHwid()
+    SetStartingWindowHwnd()
     {
         ; A = active window
         WinGet, winId ,, A
-        this.startingWindowHwid := winId
+        this.startingWindowHwnd := winId
     }
 
-    ; retrieve the window hwid of the game when we started the script
-    GetStartingWindowHwid()
+    ; retrieve the window hwnd of the game when we started the script
+    GetStartingWindowHwnd()
     {
-        return this.startingWindowHwid
+        return this.startingWindowHwnd
     }
 
-    ; get hwids of twink account windows (excluded main window hwid) to switch f.e. windows for escaping
-    GetOtherWindowHwids()
+    ; get hwnds of twink account windows (excluded main window hwnd) to switch f.e. windows for escaping
+    GetOtherWindowHwnds()
     {
-        gameHwids := []
+        gameHwnds := []
 
         WinGet, winIds, List , Blade & Soul
         Loop, %winIds%
         {
             hwnd := winIds%A_Index%
-            if (hwnd != this.startingWindowHwid) {
-                gameHwids.Push(hwnd)
+            if (hwnd != this.startingWindowHwnd) {
+                gameHwnds.Push(hwnd)
             }
         }
 
-        return gameHwids
+        return gameHwnds
     }
 
-    ; get hwids of twink account windows (excluded main window hwid) to switch f.e. windows for escaping sorted by process creation time
-    GetOtherWindowHwidsSorted()
+    ; get hwnds of twink account windows (excluded main window hwnd) to switch f.e. windows for escaping sorted by process creation time
+    GetOtherWindowHwndsSorted()
     {
         processIds := []
         sortedHwnd := []
         list := ""
 
-        for _, hwnd in Game.GetOtherWindowHwids()
+        for _, hwnd in Game.GetOtherWindowHwnds()
         {
             creationTime := GetHwndCreationTime(hwnd)
             list .= creationTime ","
@@ -72,28 +72,28 @@ class Game
         return sortedHwnd
     }
 
-    ; get all relevant window hwids to send inputs to
-    GetRelevantWindowHwids()
+    ; get all relevant window hwnds to send inputs to
+    GetRelevantWindowHwnds()
     {
-        gameHwids := []
-        gameHwids.Push(Game.GetStartingWindowHwid())
+        gameHwnds := []
+        gameHwnds.Push(Game.GetStartingWindowHwnd())
 
         if Configuration.UseMultiBoxing() {
-            twinkWindowHwids := Game.GetOtherWindowHwids()
+            twinkWindowHwnds := Game.GetOtherWindowHwnds()
 
-            for _, hwnd in twinkWindowHwids
+            for _, hwnd in twinkWindowHwnds
             {
-                gameHwids.Push(hwnd)
+                gameHwnds.Push(hwnd)
             }
         }
 
-        return gameHwids
+        return gameHwnds
     }
 
     ; send the key to all relevant windows
     SendInput(key)
     {
-        hwndList := Game.GetOtherWindowHwids()
+        hwndList := Game.GetOtherWindowHwnds()
         Send, %key%
         for _, hwnd in hwndList
         {
@@ -116,15 +116,15 @@ class Game
     ; small test function to test swapping to twink windows before swapping back to main window
     TestWindowSwaps()
     {
-        Game.SetStartingWindowHwid()
+        Game.SetStartingWindowHwnd()
 
-        for index, hwnd in Game.GetOtherWindowHwidsSorted()
+        for index, hwnd in Game.GetOtherWindowHwndsSorted()
         {
             Game.SwitchToWindow(hwnd)
             MsgBox % "index: " . index . " hwnd: " . hwnd
         }
 
-        startingWindowHwid := Game.GetStartingWindowHwid()
-        WinActivate, ahk_id %startingWindowHwid%
+        startingWindowHwnd := Game.GetStartingWindowHwnd()
+        WinActivate, ahk_id %startingWindowHwnd%
     }
 }
