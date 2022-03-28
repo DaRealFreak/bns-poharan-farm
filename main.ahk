@@ -798,7 +798,7 @@ class Poharan
         return Poharan.ExitDungeon()
     }
 
-    ExitDungeon()
+    ExitDungeon(failed := true)
     {
         ; now run in with main account
         Game.SwitchToWindow(Game.GetStartingWindowHwnd())
@@ -815,8 +815,14 @@ class Poharan
             Poharan.ExitDungeonSingleClient()
         }
 
-        log.addLogEntry("$time: failed run after " Utility.RoundDecimal(((A_TickCount - this.runStartTimeStamp) / 1000)) " seconds")
-        this.failedRuns.Push(((A_TickCount - this.runStartTimeStamp) / 1000))
+        if (failed) {
+            log.addLogEntry("$time: failed run after " Utility.RoundDecimal(((A_TickCount - this.runStartTimeStamp) / 1000)) " seconds")
+            this.failedRuns.Push(((A_TickCount - this.runStartTimeStamp) / 1000))
+        } else {
+            log.addLogEntry("$time: run took " Utility.RoundDecimal(((A_TickCount - this.runStartTimeStamp) / 1000)) " seconds")
+            this.successfulRuns.Push(((A_TickCount - this.runStartTimeStamp) / 1000))
+        }
+
         this.runCount += 1
 
         Poharan.LogStatistics()
@@ -929,6 +935,7 @@ class Poharan
         expectedSuccessfulRunsPerHour := averageRunsHour * successRate
 
         log.addLogEntry("$time: runs done: " this.runCount " (died in " (failedRuns) " out of " this.runCount " runs (" Utility.RoundDecimal(failedRate * 100) "%), average run time: " Utility.RoundDecimal(averageRunTime) " seconds)")
+        log.addLogEntry("$time: expected runs per hour: " expectedSuccessfulRunsPerHour)
     }
 
     Exiting()
