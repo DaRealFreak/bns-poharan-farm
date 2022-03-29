@@ -651,6 +651,7 @@ class Poharan
         for index, hwnd in Game.GetOtherWindowHwndsSorted()
         {
             Game.SwitchToWindow(hwnd)
+            Poharan.EnableAnimationSpeedHack()
 
             send {w down}
             send {d down}
