@@ -336,6 +336,8 @@ class Poharan
             }
         }
 
+        log.addLogEntry("$time: making portal to boss " boss)
+
         if (boss == 1) {
             loop, 15 {
                 Configuration.EnableClipBossOne()
