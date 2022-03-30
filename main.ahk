@@ -88,7 +88,7 @@ class Poharan
     {
         loop, 20 {
             Configuration.DisableLobbySpeedhack()
-            sleep 50
+            sleep 25
         }
     }
 
@@ -224,6 +224,8 @@ class Poharan
     ; functionality to move all clients into the dungeon
     MoveClientsToDungeon(onlyClients := false)
     {
+        Poharan.DisableLobbySpeedhack()
+
         if (!onlyClients) {
             this.runStartTimeStamp := A_TickCount
 
@@ -782,6 +784,7 @@ class Poharan
             return Poharan.ExitDungeon(false)
         }
 
+        Poharan.DisableAnimationSpeedHack()
         Poharan.EnableLobbySpeedhack()
 
         while (UserInterface.IsExitPortalVisible()) {
@@ -792,16 +795,13 @@ class Poharan
         }
 
         while (!UserInterface.IsInLoadingScreen()) {
-            loop, 5 {
-                send f
-                send y
-                sleep 150
-            }
+            send f
+            sleep 5
+            send y
+            sleep 5
             send n
+            sleep 25
         }
-
-        Poharan.DisableAnimationSpeedHack()
-        Poharan.DisableLobbySpeedhack()
 
         return true
     }
