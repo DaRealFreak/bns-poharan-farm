@@ -40,7 +40,7 @@ class Poharan
     {
         loop, 20 {
             Configuration.EnableAnimationSpeedHack()
-            sleep 50
+            sleep 25
         }
     }
 
@@ -48,7 +48,7 @@ class Poharan
     {
         loop, 20 {
             Configuration.EnableSlowAnimationSpeedHack()
-            sleep 50
+            sleep 25
         }
     }
 
@@ -56,7 +56,7 @@ class Poharan
     {
         loop, 20 {
             Configuration.EnableAnimationSpeedHackWarlock()
-            sleep 50
+            sleep 25
         }
     }
 
@@ -64,7 +64,7 @@ class Poharan
     {
         loop, 20 {
             Configuration.DisableAnimationSpeedhack()
-            sleep 50
+            sleep 25
         }
     }
 
@@ -72,7 +72,7 @@ class Poharan
     {
         loop, 20 {
             Configuration.DisableAnimationSpeedHackWarlock()
-            sleep 50
+            sleep 25
         }
     }
 
@@ -80,7 +80,7 @@ class Poharan
     {
         loop, 20 {
             Configuration.EnableLobbySpeedhack()
-            sleep 50
+            sleep 25
         }
     }
 
@@ -224,8 +224,6 @@ class Poharan
     ; functionality to move all clients into the dungeon
     MoveClientsToDungeon(onlyClients := false)
     {
-        Poharan.DisableLobbySpeedhack()
-
         if (!onlyClients) {
             this.runStartTimeStamp := A_TickCount
 
@@ -246,8 +244,6 @@ class Poharan
             {
                 Game.SwitchToWindow(hwnd)
                 Poharan.WaitLoadingScreen()
-                ; safety disable since ce hotkeys failed few times previously
-                Poharan.DisableLobbySpeedhack()
 
                 log.addLogEntry("$time: moving client " index " to dungeon")
 
@@ -565,6 +561,8 @@ class Poharan
                     sleep 250
                 }
             }
+
+            Poharan.MoveToPoharan(true)
         } else {
             log.addLogEntry("$time: moving warlock to Poharan")
             Game.SwitchToWindow(Game.GetStartingWindowHwnd())
@@ -596,16 +594,6 @@ class Poharan
 
         if (Configuration.UseWarlockForB1()) {
             Game.SwitchToWindow(Game.GetStartingWindowHwnd())
-        } else {
-            log.addLogEntry("$time: moving clients to Tae Jangum")
-            ; every leecher moves to the dungeon as well after waiting for possible loading screens
-            for index, hwnd in Game.GetOtherWindowHwndsSorted()
-            {
-                ; only use the first window to go for b1
-                if (index == 1) {
-                    Game.SwitchToWindow(hwnd)
-                }
-            }
         }
 
         while (!UserInterface.IsOutOfCombat()) {
@@ -642,42 +630,50 @@ class Poharan
         return Poharan.MoveToPoharan()
     }
 
-    MoveToPoharan()
+    MoveToPoharan(clients := false)
     {
-        log.addLogEntry("$time: moving warlock into position for poharan")
-        Game.SwitchToWindow(Game.GetStartingWindowHwnd())
+        if (!clients) {
+            log.addLogEntry("$time: moving warlock into position for poharan")
+            Game.SwitchToWindow(Game.GetStartingWindowHwnd())
 
-        if (Configuration.UseWarlockForB1()) {
-            Poharan.EnableAnimationSpeedHack()
-        } else {
-            Poharan.EnableAnimationSpeedHackWarlock()
-        }
-
-        send {w down}
-        send {d down}
-        sleep 250
-        send {Shift}
-        sleep 45*1000 / Configuration.MovementSpeedhackValue()
-        send {w up}
-        send {d up}
-
-        log.addLogEntry("$time: moving clients into position for poharan")
-        ; every leecher moves into the same position as well
-        for index, hwnd in Game.GetOtherWindowHwndsSorted()
-        {
-            Game.SwitchToWindow(hwnd)
-            Poharan.EnableAnimationSpeedHack()
+            if (Configuration.UseWarlockForB1()) {
+                Poharan.EnableAnimationSpeedHack()
+            } else {
+                Poharan.EnableAnimationSpeedHackWarlock()
+            }
 
             send {w down}
             send {d down}
             sleep 250
             send {Shift}
-            sleep 35*1000 / Configuration.MovementSpeedhackValue()
+            sleep 45*1000 / Configuration.MovementSpeedhackValue()
             send {w up}
             send {d up}
         }
 
-        return Poharan.FightPoharan()
+        ; if we either don't use wl for b1 or explicitely want to move the clients don't move them yet
+        if (clients || !Configuration.UseWarlockForB1()) {
+            log.addLogEntry("$time: moving clients into position for poharan")
+            ; every leecher moves into the same position as well
+            for index, hwnd in Game.GetOtherWindowHwndsSorted()
+            {
+                Game.SwitchToWindow(hwnd)
+                Poharan.EnableAnimationSpeedHack()
+
+                send {w down}
+                send {d down}
+                sleep 250
+                send {Shift}
+                sleep 35*1000 / Configuration.MovementSpeedhackValue()
+                send {w up}
+                send {d up}
+            }
+        }
+
+        ; only start autocombat if its the main window
+        if (!clients) {
+            return Poharan.FightPoharan()
+        }
     }
 
     FightPoharan()
@@ -760,7 +756,6 @@ class Poharan
 
     LeaveDungeonClient(client)
     {
-        Poharan.DisableLobbySpeedhack()
         Poharan.EnableSlowAnimationSpeedHack()
 
         Configuration.ToggleAutoCombat()
@@ -807,8 +802,6 @@ class Poharan
             send f
             sleep 5
         }
-
-        Poharan.EnableLobbySpeedhack()
 
         ; accept/deny the bonus reward
         while (UserInterface.IsInBonusRewardSelection()) {
@@ -886,8 +879,6 @@ class Poharan
             sleep 25
         }
 
-        Poharan.DisableLobbySpeedhack()
-
         if (UserInterface.IsOutOfCombat()) {
             while (!UserInterface.IsInF8Lobby()) {
                 if (!Utility.GameActive()) {
@@ -935,13 +926,6 @@ class Poharan
                     sleep 75
                 }
                 send n
-            }
-
-            while (!UserInterface.IsInF8Lobby()) {
-                if (!Utility.GameActive()) {
-                    log.addLogEntry("$time: couldn't find game process, exiting")
-                    ExitApp
-                }
 
                 ; ahk will send Shift+v if we just try to send an upper case v lol
                 send V
