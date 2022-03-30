@@ -459,7 +459,13 @@ class Poharan
             Game.SwitchToWindow(Game.GetStartingWindowHwnd())
         }
 
+        start := A_TickCount
         while (!UserInterface.IsDynamicVisible()) {
+            if (A_TickCount > start + 95*1000) {
+                log.addLogEntry("$time: timeout for fighting Tae Jangum, abandoning run")
+                return Poharan.ExitDungeon()
+            }
+
             if (UserInterface.IsReviveVisible() || UserInterface.IsInLoadingScreen()) {
                 log.addLogEntry("$time: died during Tae Jangum, abandoning run")
                 return Poharan.ExitDungeon()
@@ -754,6 +760,7 @@ class Poharan
 
     LeaveDungeonClient(client)
     {
+        Poharan.DisableLobbySpeedhack()
         Poharan.EnableSlowAnimationSpeedHack()
 
         Configuration.ToggleAutoCombat()
@@ -785,7 +792,6 @@ class Poharan
         }
 
         Poharan.DisableAnimationSpeedHack()
-        Poharan.EnableLobbySpeedhack()
 
         while (UserInterface.IsExitPortalVisible()) {
             send f
@@ -794,13 +800,27 @@ class Poharan
             sleep 150
         }
 
-        while (!UserInterface.IsInLoadingScreen()) {
+        ; use portal and get into dynamic quest
+        while (!UserInterface.IsInBonusRewardSelection()) {
+            send y
+            sleep 5
             send f
             sleep 5
+        }
+
+        Poharan.EnableLobbySpeedhack()
+
+        ; accept/deny the bonus reward
+        while (UserInterface.IsInBonusRewardSelection()) {
             send y
             sleep 5
             send n
             sleep 25
+        }
+
+        while (!UserInterface.IsInLoadingScreen()) {
+            send f
+            sleep 5
         }
 
         return true

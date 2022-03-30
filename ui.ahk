@@ -83,6 +83,11 @@ class UserInterface
         return Utility.GetColor(1628,685) == "0x463E2C"
     }
 
+    IsInBonusRewardSelection()
+    {
+        return Utility.GetColor(1614,676) == "0xBCA664"
+    }
+
     ; some of the filled out bar in the loading screen on the bottom of the screen
     IsInLoadingScreen()
     {
