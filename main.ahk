@@ -481,6 +481,11 @@ class Poharan
             Configuration.ToggleAutoCombat()
             Poharan.MakePortalBoss(2)
             while (!UserInterface.IsOutOfCombat()) {
+                if (UserInterface.IsReviveVisible() || UserInterface.IsInLoadingScreen()) {
+                    log.addLogEntry("$time: died after Tae Jangum, abandoning run")
+                    return Poharan.ExitDungeon()
+                }
+
                 sleep 25
             }
         }
