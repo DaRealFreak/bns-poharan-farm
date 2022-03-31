@@ -919,7 +919,7 @@ class Poharan
 
             return
         } else {
-            while (!UserInterface.IsInLoadingScreen() && !UserInterface.IsInF8Lobby()) {
+            while (!UserInterface.IsInF8Lobby()) {
                 if (!Utility.GameActive()) {
                     log.addLogEntry("$time: couldn't find game process, exiting")
                     ExitApp
