@@ -767,6 +767,7 @@ class Poharan
 
         if (!Camera.ResetCamera(client)) {
             log.addLogEntry("$time: unable to reset camera, returning to lobby")
+            Configuration.ClipShadowPlay()
             return false
         }
         
@@ -814,6 +815,10 @@ class Poharan
         while (!UserInterface.IsInLoadingScreen()) {
             send f
             sleep 5
+            send y
+            sleep 5
+            send n
+            sleep 25
         }
 
         return true
