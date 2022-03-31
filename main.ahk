@@ -805,11 +805,19 @@ class Poharan
         }
 
         ; accept/deny the bonus reward
+        start := A_TickCount
         while (UserInterface.IsInBonusRewardSelection()) {
-            send y
-            sleep 5
-            send n
-            sleep 25
+            ; sometimes the reward will bug out (daily reset)
+            ; so we use a timeout to escape from the quest reward window
+            if (start+5*1000 > A_TickCount) {
+                send {Esc}
+                sleep 25
+            } else {
+                send y
+                sleep 25
+                send n
+                sleep 25
+            }
         }
 
         while (!UserInterface.IsInLoadingScreen()) {
