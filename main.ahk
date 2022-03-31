@@ -809,7 +809,7 @@ class Poharan
         while (UserInterface.IsInBonusRewardSelection()) {
             ; sometimes the reward will bug out (daily reset)
             ; so we use a timeout to escape from the quest reward window
-            if (start+5*1000 > A_TickCount) {
+            if (A_TickCount > start + 7*1000) {
                 send {Esc}
                 sleep 25
             } else {
