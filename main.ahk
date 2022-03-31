@@ -823,10 +823,6 @@ class Poharan
         while (!UserInterface.IsInLoadingScreen()) {
             send f
             sleep 5
-            send y
-            sleep 5
-            send n
-            sleep 25
         }
 
         return true
