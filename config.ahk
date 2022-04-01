@@ -20,7 +20,7 @@ class Configuration
 
     Clients()
     {
-        return ["Lunar Tempest", "Mooon"]
+        return ["Lunar Tempest", "Sh{U+00E3}rk"]
     }
 
     InviteDuo(name)

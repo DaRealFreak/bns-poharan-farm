@@ -387,7 +387,9 @@ class Poharan
         send {a up}
 
         send {w down}
-        sleep 3.2*1000
+        sleep 150
+        send {Shift}
+        sleep 1.65*1000
         send {w up}
 
         if (Configuration.UseWarlockForB1()) {
@@ -429,7 +431,7 @@ class Poharan
         send {d down}
         sleep 9*1000 / Configuration.MovementSpeedhackValue()
         send {w down}
-        sleep 5*1000 / Configuration.MovementSpeedhackValue()
+        sleep 6*1000 / Configuration.MovementSpeedhackValue()
         send {d up}
         send {w up}
 
@@ -445,6 +447,14 @@ class Poharan
         log.addLogEntry("$time: fighting boss Tae Jangum")
 
         Configuration.ToggleAutoCombat()
+
+        ; wait a tiny bit for auto combat to turn the camera
+        sleep 100
+
+        ; move away from the original start point to get a similar camera even on tab escape usage
+        send {a down}
+        sleep 4*1000 / Configuration.MovementSpeedhackValue()
+        send {a up}
 
         if (Configuration.UseWarlockForB1()) {
             if (!Poharan.MoveClientsToDungeon(true)) {
@@ -528,12 +538,18 @@ class Poharan
         sleep 13*1000 / Configuration.MovementSpeedhackValue()
         send {d up}
 
+        loop, 4 {
+            Configuration.GetIntoCombat()
+            sleep 25
+        }
+
         send {a down}
         sleep 0.4*1000 / Configuration.MovementSpeedhackValue()
         send {a up}
 
+        ; get into 30m range of the last fm needed for the invisible wall to disappear
         send {w down}
-        sleep 9*1000 / Configuration.MovementSpeedhackValue()
+        sleep 11*1000 / Configuration.MovementSpeedhackValue()
         send {w up}
 
         Configuration.ToggleAutoCombat()
@@ -544,11 +560,13 @@ class Poharan
             {
                 Game.SwitchToWindow(hwnd)
                 send {w down}
-                sleep 5.3*1000
+                sleep 150
+                send {Shift}
+                sleep 3*1000
                 send {w up}
 
                 send {a down}
-                sleep 0.4*1000
+                sleep 0.45*1000
                 send {a up}
 
                 if (!UserInterface.IsPortalIconVisible()) {
